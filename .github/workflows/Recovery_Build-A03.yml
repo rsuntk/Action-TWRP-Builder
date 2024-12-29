@@ -158,11 +158,10 @@ jobs:
         export ALLOW_MISSING_DEPENDENCIES=true
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
         if [ -d $(pwd)/out ]; then
-        	cd $(pwd)/out/target/product/${{ github.event.inputs.DEVICE_NAME }}
-        	lz4 -B6 --content-size ${{ github.event.inputs.BUILD_TARGET }}.img ${{ github.event.inputs.BUILD_TARGET }}.img.lz4
-        	tar -cvf ${{ github.event.inputs.BUILD_TARGET }}.img.tar ${{ github.event.inputs.BUILD_TARGET }}.img.lz4
+        	cd out/target/product/${{ github.event.inputs.DEVICE_NAME }}
+        	tar -cvf ${{ github.event.inputs.BUILD_TARGET }}.img.tar ${{ github.event.inputs.BUILD_TARGET }}.img
+          cd ../../..
         fi
-        cd ../../..
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Upload to Release
@@ -170,7 +169,6 @@ jobs:
       with:
         files: | 
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img.lz4
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img.tar
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*vendor*.img
