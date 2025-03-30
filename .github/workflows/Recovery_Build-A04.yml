@@ -156,7 +156,7 @@ jobs:
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-eng && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
+        lunch ${{ github.event.inputs.MAKEFILE_NAME }}-userdebug && make clean && make ${{ github.event.inputs.BUILD_TARGET }}image -j$(nproc --all)
         if [ -d $(pwd)/out ]; then
         	cd out/target/product/${{ github.event.inputs.DEVICE_NAME }}
         	tar -cvf ${{ github.event.inputs.BUILD_TARGET }}.img.tar ${{ github.event.inputs.BUILD_TARGET }}.img
